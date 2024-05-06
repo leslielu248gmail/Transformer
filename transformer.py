@@ -239,10 +239,21 @@ class Transformer(nn.Module):
     return out
 
 
-                 
+# Test Transformer
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+src_vocab_size = 10000
+trg_vocab_size = 10000
+src_pad_idx = 0
+trg_pad_idx = 0
 
+model = Transformer(src_vocab_size, trg_vocab_size, src_pad_idx, trg_pad_idx).to(device)
 
+# Sample data (batch_size=1, sequence length=10)
+src = torch.tensor([[1, 5, 6, 2, 0, 0, 0, 0, 0, 0]], device=device)
+trg = torch.tensor([[1, 7, 4, 3, 2, 0, 0, 0, 0, 0]], device=device)
 
+out = model(src, trg[:, :-1])
+print(out.shape) # Expected shape: (batch_size, trg_seq_length-1, trg_vocab_size)
 
 
 
