@@ -5,7 +5,7 @@ import math
 
 
 class MultiHeadAttention(nn.Module):
-  def __init__(self, embed_size heads):
+  def __init__(self, embed_size, heads):
     super(MultiHeadAttention, self).__init__()
     self.embed_size = embed_size
     self.heads = heads
