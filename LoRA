@@ -1,0 +1,14 @@
+# Lora
+
+class LoRA(nn.Module):
+    def __init__(self, rank, input_dim, output_dim):
+        self.rank = rank
+        self.lora_A = nn.linear(input_dim, rank, bias=False)
+        self.lora_B = nn.linear(rank, output_dim, boas=False)
+
+    def forward(self, x):
+        return self.lora_B(self.lora_A(x))
+
+q = q + self.lora_q(q)
+k = k + self.lora_k(k)
+v = v + self.lora_v(v)
