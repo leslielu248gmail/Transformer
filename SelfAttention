@@ -1,0 +1,28 @@
+# self-attention
+import torch
+import torch.nn.functional as F
+
+class SelfAttention:
+    def __init__(self, input_dim, output_dim):
+        self.output_dim = output_dim
+        self.W_q = nn.linear(input_dim, output_dim)
+        self.W_k = nn.linear(input_dim, output_dim)
+        self.W_v = nn.linear(input_dim, output_dim)
+    
+    def forward(self, x)
+        # x batch_size * t * input_dim
+        # Q
+        # K
+        # V
+        Q = self.W_q(x) # batch_size * t * output_dim
+        K = self.W_k(x) # batch_size * t * output_dim
+        V = self.W_v(x) # batch_size * t * output_dim
+
+        # attention score
+        attention_score = torch.matmul(Q, K.transpose(1, 2))/torch.srqt(torch.tensor(self.output_dim))
+
+        output = F.softmax(attention_score, dim=-1) 
+        output = torch.matmul(V, output) # batch_size * t * output_dim # batch_size * t * t -> # batch_size * t * output_dim
+        
+        return output
+
