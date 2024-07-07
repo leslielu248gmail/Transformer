@@ -1,0 +1,36 @@
+# Multihead-SelfAttention
+class Multihead_SelfAttention:
+    def __init__(self, head, input_dim, output_dim):
+        self.input_dim = input_dim
+        self.output_dim = output_dim
+        self.head = head
+        self.head_dim = output_dim//head
+
+        # input_dim * output_dim
+        self.W_q = nn.linear(input_dim, output_dim)
+        self.W_k = nn.linear(input_dim, output_dim)
+        self.W_v = nn.linear(input_dim, output_dim)
+    
+    def forward(self, x):
+        
+        Q = self.W_q(x) # batch_size * t * output_dim
+        K = self.W_k(x) # batch_size * t * output_dim
+        V = self.W_v(x) # batch_size * t * output_dim
+
+        # 分割多头 batch_size * t * output_dim -> batch_size * head * t * head_dim
+        Q = Q.view(batch_size, -1, self.head, self.head_dim).transpose(1, 2)
+        K = K.view(batch_size, -1, self.head, self.head_dim).transpose(1, 2)
+        V = V.view(batch_size, -1, self.head, self.head_dim).transpose(1, 2)
+        
+        # attention_score batch_size * head * t * head_dim, batch_size * head * t * head_dim -> batch_size * head * t * t
+        attention_score = torch.matmul(Q, K.transpose(1, 2))/torch.sqrt(torch.tensor(self.output_dim))
+        attention_weights = F.softmax(attention_score, dim=-1)
+
+        # batch_size * head * t * t, batch_size * head * t * head_dim -> batch_size * head * t * head_dim
+        output = torch.matmul(attention_weights, V)
+
+        # 合并多头
+        # batch_size * head * t * head_dim -> batch_size * t * (head * head_dim)
+        output = output.tranpose(1, 2).contiguous().view(batch_size, -1, self.output_dim)
+        return output
+
