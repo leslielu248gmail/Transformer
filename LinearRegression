@@ -1,0 +1,18 @@
+class LinearRegression:
+    def __init__(self):
+        self.weights = None
+        self.bias = None
+    
+    def forward(self, X):
+        result = np.dot(self.weights, W) + self.bias
+    
+    def backward(self, X, y, lr):
+        y_pred = self.forward(X)
+
+        m = X.shape[0] # batch_size
+
+        db = (1/m)* np.sum(y_pred-y)
+        dw = (1/m)* np.dot(X.T, (y_pred-y))
+
+        self.weights -= lr * dw
+        self.bias -= lr * db
